@@ -1,0 +1,16 @@
+div.container {
+  width: 440px;
+  height: 440px;
+}
+
+div.single-cell {
+  border: 1px solid black;
+  width: 20px;
+  height: 20px;
+  float: left;
+  text-align: center;
+}
+
+div.black {
+  background-color: black;
+}
