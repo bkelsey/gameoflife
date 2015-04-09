@@ -11,6 +11,24 @@
 </head>
 <body ng-controller="MainController">
   <h1> Conway's Game of Life </h1>
+  <p>
+    The "game" is a zero-player game, meaning that its evolution is determined by its initial state, requiring no further input. One interacts with the Game of Life by creating an initial configuration and observing how it evolves or, for advanced players, by creating patterns with particular properties. More information can be found here: <a href='http://en.wikipedia.org/wiki/Conway%27s_Game_of_Life' target='_blank'>http://en.wikipedia.org/wiki/Conway's_Game_of_Life</a>
+  </p>
+
+  <h2>Instructions</h2>
+  <ol>
+    <li>Set width and height of the grid</li>
+    <li>Press New Game to create a new grid</li>
+    <li>Press Start to watch the evolution of cells</li>
+  </ol>
+
+  <h2>Rules of the Cells</h2>
+  <ol>
+    <li>Any live cell with fewer than two live neighbours dies, as if caused by under-population.</li>
+    <li>Any live cell with two or three live neighbours lives on to the next generation.</li>
+    <li>Any live cell with more than three live neighbours dies, as if by overcrowding.</li>
+    <li>Any dead cell with exactly three live neighbours becomes a live cell, as if by reproduction.</li>
+  </ol>
 
   <div class='spacing'>
     Width:  <input type='text' class='width' ng-model='cellWidth' ng-change='setWidth(cellWidth)'>
