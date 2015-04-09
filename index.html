@@ -13,13 +13,14 @@
   <h1> Conway's Game of Life </h1>
 
   <div class='spacing'>
-    Width:  <input type='text' class='width' ng-model='cellWidth'>
+    Width:  <input type='text' class='width' ng-model='cellWidth' ng-change='setWidth(cellWidth)'>
   </div>
   <div class='spacing'>
-    Height: <input type='text' class='height' ng-model='cellHeight'>
+    Height: <input type='text' class='height' ng-model='cellHeight' ng-change='setHeight(cellHeight)'>
   </div>
 
-  <button type='button' class='start' ng-click="step()">Start</button>
+  <button type='button' class='newGame' ng-click='newGame()'>New Game</button>
+  <button type='button' class='start' ng-click="cellData.start()">Start</button>
 
   <div class='container'>
     <div ng-repeat='row in cellData.cells'>

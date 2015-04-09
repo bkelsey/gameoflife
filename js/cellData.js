@@ -1,4 +1,5 @@
-app.factory('cellData', ['$http', function($http) {
+app.factory('cellData', ['$http', '$interval', function($http, $interval) {
+  var stop;
   var cellData = {
     alive_count: 0,
     width: 20,
@@ -14,6 +15,26 @@ app.factory('cellData', ['$http', function($http) {
   cellData.setHeight = function(height) {
     cellData.height = height;
   };
+
+  cellData.start = function() {
+    if (angular.isDefined(stop) == false) {
+        stop = $interval(function() {
+          if (cellData.alive_count > 0) {
+            cellData.step();
+          }
+          else {
+            cellData.stopGame();
+          }
+        }, 500);
+    }
+  };
+
+  cellData.stopGame = function() {
+    if (angular.isDefined(stop)) {
+      $interval.cancel(stop)
+      stop = undefined;
+    }
+  }
 
   cellData.createCells = function() {
     cellData.cells = [];

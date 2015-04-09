@@ -4,25 +4,19 @@ app.controller("MainController", ['$scope', '$interval', 'cellData', function($s
   $scope.cellWidth = cellData.width;
   $scope.cellHeight = cellData.height;
 
-  var stop;
-  $scope.step = function() {
-    if (angular.isDefined(stop) == false) {
-        stop = $interval(function() {
-          if (cellData.alive_count > 0) {
-            cellData.step();
-          }
-          else {
-            $scope.stopStep();
-          }
-        }, 500);
-    }
+  $scope.setCellWidth = function(width) {
+    $scope.cellWidth = width;
   };
 
-  $scope.stopStep = function() {
-    if (angular.isDefined(stop)) {
-      $interval.cancel(stop)
-      stop = undefined;
-    }
+  $scope.setCellHeight = function(height) {
+    $scope.cellHeight = height;
   };
+
+  $scope.newGame = function() {
+    cellData.setWidth($scope.cellWidth);
+    cellData.setHeight($scope.cellHeight);
+    cellData.stopGame();
+    cellData.createCells();
+  }
 
 }]);
