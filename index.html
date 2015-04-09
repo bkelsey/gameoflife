@@ -7,17 +7,27 @@
   <script src="bower_components/angular/angular.js"></script>
   <script src="js/app.js"></script>
   <script src="js/MainController.js"></script>
+  <script src="js/cellData.js"></script>
 </head>
 <body ng-controller="MainController">
+  <h1> Conway's Game of Life </h1>
+
+  <div class='spacing'>
+    Width:  <input type='text' class='width' ng-model='cellWidth'>
+  </div>
+  <div class='spacing'>
+    Height: <input type='text' class='height' ng-model='cellHeight'>
+  </div>
+
+  <button type='button' class='start' ng-click="step()">Start</button>
 
   <div class='container'>
-    <div ng-repeat='row in cells'>
-      <div class='single-cell' ng-repeat='cell in row'>
-        {{ cell.display }}
+    <div ng-repeat='row in cellData.cells'>
+      <div ng-repeat='cell in row' class="single-cell" ng-class="{'black': cell.is_alive}">
       </div>
+      <p class='clear'></p>
     </div>
 
-    <p ng-click="step()">Step</p>
   </div>
 
 </body>
