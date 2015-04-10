@@ -14,10 +14,13 @@ Next you'll need bower:
 ```
 npm install -g bower
 ```
-Then use bower to install angular:
+Then use bower to install angular, underscore, and require:
 ```
 bower install angular
+bower install underscore
+bower install require
 ```
+
 Finally I use serve to run my server:
 ```
 npm install -g serve
