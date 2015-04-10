@@ -1,4 +1,5 @@
-app.factory('cellData', ['$http', '$interval', function($http, $interval) {
+app.factory('cellData', ['$interval', function($interval) {
+  var _ = require('underscore');
   var stop;
   var cellData = {
     alive_count: 0,
@@ -6,14 +7,6 @@ app.factory('cellData', ['$http', '$interval', function($http, $interval) {
     height: 20,
     cells: [],
     copy: []
-  };
-
-  cellData.setWidth = function(width) {
-    cellData.width = width;
-  };
-
-  cellData.setHeight = function(height) {
-    cellData.height = height;
   };
 
   cellData.start = function() {
@@ -37,48 +30,45 @@ app.factory('cellData', ['$http', '$interval', function($http, $interval) {
   }
 
   cellData.createCells = function() {
-    cellData.cells = [];
-    for (var i = 0; i < cellData.height; i++) {
-      var row = [];
-      for (var j = 0; j < cellData.width; j++) {
-        var cell = {
-          is_alive: false
-        }
-        if (Math.random() > 0.90) {
-          cell.is_alive = true;
-          cellData.alive_count += 1;
-        }
-        row.push(cell);
-      }
-      cellData.cells.push(row);
-    }
+    cellData.cells = _.times(cellData.height, function() {
+      return _.times(cellData.width, cellData.createCell)
+    });
   };
+
+  cellData.createCell = function() {
+    var cell = { is_alive: false };
+    if (Math.random() > 0.85) {
+      cell.is_alive = true;
+      cellData.alive_count += 1;
+    }
+    return cell;
+  }
 
 
   cellData.step = function() {
     angular.copy(cellData.cells, cellData.copy);
-    for (var i = 0; i < cellData.height; i++) {
-      for (var j = 0; j < cellData.width; j++) {
-        cellData.check_cells(i, j);
-      }
-    }
+    _.each(cellData.cells, function(row, i) {
+      _.each(row, function(cell, j) {
+        cellData.checkNeighbors(i, j);
+      })
+    });
   };
 
-  cellData.check_cells = function(row, col) {
+  cellData.checkNeighbors = function(row, col) {
     var total = 0;
     // Check above
-    total += cellData.cell_alive(row-1, col-1) ? 1 : 0;
-    total += cellData.cell_alive(row-1, col) ? 1 : 0;
-    total += cellData.cell_alive(row-1, col+1) ? 1 : 0;
+    total += cellData.cellAlive(row-1, col-1) ? 1 : 0;
+    total += cellData.cellAlive(row-1, col) ? 1 : 0;
+    total += cellData.cellAlive(row-1, col+1) ? 1 : 0;
 
     // Check same row
-    total += cellData.cell_alive(row, col-1) ? 1 : 0;
-    total += cellData.cell_alive(row, col+1) ? 1 : 0;
+    total += cellData.cellAlive(row, col-1) ? 1 : 0;
+    total += cellData.cellAlive(row, col+1) ? 1 : 0;
 
     // Check below
-    total += cellData.cell_alive(row+1, col-1) ? 1 : 0;
-    total += cellData.cell_alive(row+1, col) ? 1 : 0;
-    total += cellData.cell_alive(row+1, col+1) ? 1 : 0;
+    total += cellData.cellAlive(row+1, col-1) ? 1 : 0;
+    total += cellData.cellAlive(row+1, col) ? 1 : 0;
+    total += cellData.cellAlive(row+1, col+1) ? 1 : 0;
 
     if (cellData.cells[row][col].is_alive) {
       if (total < 2 || total > 3) {
@@ -94,7 +84,7 @@ app.factory('cellData', ['$http', '$interval', function($http, $interval) {
     }
   };
 
-  cellData.cell_alive = function(row, col) {
+  cellData.cellAlive = function(row, col) {
     if (row < 0 || row >= cellData.height) {
       return false;
     }
