@@ -22,6 +22,9 @@
     <li>Set width and height of the grid</li>
     <li>Press New Game to create a new grid</li>
     <li>Press Start to watch the evolution of cells</li>
+    <li>Press Stop at any time to stop the game. You may click start again to continue the evolution.</li>
+    <li>Press Clear to clear the board at any time.</li>
+    <li>Clicking on a specific cell, while the game isn't running, will bring it to life(black) or kill it(white)
   </ol>
 
   <h2>Rules of the Cells</h2>
@@ -33,19 +36,20 @@
   </ol>
 
   <div class='spacing'>
-    Width:  <input type='text' class='width' ng-model='cellData.width'>
+    Width:  <input type='text' class='width' ng-model='cellData.width' ng-disabled='cellData.is_running'>
   </div>
   <div class='spacing'>
-    Height: <input type='text' class='height' ng-model='cellData.height'>
+    Height: <input type='text' class='height' ng-model='cellData.height' ng-disabled='cellData.is_running'>
   </div>
 
-  <button type='button' class='newGame' ng-click='newGame()'>New Game</button>
-  <button type='button' class='start' ng-click="cellData.start()">Start</button>
+  <button type='button' class='newGame' ng-click='cellData.createCells()' ng-disabled='cellData.is_running'>New Game</button>
+  <button type='button' class='start' ng-click="cellData.start()" ng-disabled='cellData.is_running'>Start</button>
   <button type='button' class='stopGame' ng-click="cellData.stopGame()">Stop</button>
+  <button type='button' class='clear' ng-click="cellData.clear()">Clear</button>
 
   <div class='container'>
     <div ng-repeat='row in cellData.cells'>
-      <div ng-repeat='cell in row' class="single-cell" ng-class="{'black': cell.is_alive}">
+      <div ng-repeat='cell in row' class="single-cell" ng-class="{'black': cell.is_alive}" ng-click="cellData.clicked(cell)">
       </div>
       <p class='clear'></p>
     </div>

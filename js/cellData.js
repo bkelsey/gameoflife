@@ -1,7 +1,7 @@
 app.factory('cellData', ['$interval', function($interval) {
   var _ = require('underscore');
-  var stop;
   var cellData = {
+    is_running: false,
     alive_count: 0,
     width: 20,
     height: 20,
@@ -9,8 +9,13 @@ app.factory('cellData', ['$interval', function($interval) {
     copy: []
   };
 
+  var neighbors = [[-1, -1], [-1, 0], [-1, 1],
+                     [0, -1], [0, 1],
+                     [1, -1], [1, 0], [1, 1]];
+
   cellData.start = function() {
-    if (angular.isDefined(stop) == false) {
+    if (cellData.is_running == false) {
+        cellData.is_running = true;
         stop = $interval(function() {
           if (cellData.alive_count > 0) {
             cellData.step();
@@ -23,9 +28,9 @@ app.factory('cellData', ['$interval', function($interval) {
   };
 
   cellData.stopGame = function() {
-    if (angular.isDefined(stop)) {
+    if (cellData.is_running) {
       $interval.cancel(stop)
-      stop = undefined;
+      cellData.is_running = false;
     }
   }
 
@@ -44,6 +49,20 @@ app.factory('cellData', ['$interval', function($interval) {
     return cell;
   }
 
+  cellData.clicked = function(cell) {
+    if (cellData.is_running == false) {
+      cell.is_alive = !cell.is_alive;
+    }
+  };
+
+  cellData.clear = function() {
+    _.each(cellData.cells, function(row) {
+      _.each(row, function(cell) {
+        cell.is_alive = false;
+      })
+    });
+    cellData.stopGame();
+  }
 
   cellData.step = function() {
     angular.copy(cellData.cells, cellData.copy);
@@ -56,19 +75,10 @@ app.factory('cellData', ['$interval', function($interval) {
 
   cellData.checkNeighbors = function(row, col) {
     var total = 0;
-    // Check above
-    total += cellData.cellAlive(row-1, col-1) ? 1 : 0;
-    total += cellData.cellAlive(row-1, col) ? 1 : 0;
-    total += cellData.cellAlive(row-1, col+1) ? 1 : 0;
 
-    // Check same row
-    total += cellData.cellAlive(row, col-1) ? 1 : 0;
-    total += cellData.cellAlive(row, col+1) ? 1 : 0;
-
-    // Check below
-    total += cellData.cellAlive(row+1, col-1) ? 1 : 0;
-    total += cellData.cellAlive(row+1, col) ? 1 : 0;
-    total += cellData.cellAlive(row+1, col+1) ? 1 : 0;
+    _.each(neighbors, function(n) {
+      total += cellData.cellAlive(row + n[0], col + n[1]);
+    });
 
     if (cellData.cells[row][col].is_alive) {
       if (total < 2 || total > 3) {

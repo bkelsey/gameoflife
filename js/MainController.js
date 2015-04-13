@@ -2,9 +2,4 @@ app.controller("MainController", ['$scope', '$interval', 'cellData', function($s
   $scope.cellData = cellData;
   cellData.createCells();
 
-  $scope.newGame = function() {
-    cellData.stopGame();
-    cellData.createCells();
-  }
-
 }]);
